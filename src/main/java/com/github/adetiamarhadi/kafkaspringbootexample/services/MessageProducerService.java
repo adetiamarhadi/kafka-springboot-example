@@ -1,5 +1,6 @@
 package com.github.adetiamarhadi.kafkaspringbootexample.services;
 
+import com.github.adetiamarhadi.kafkaspringbootexample.dto.Greeting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -15,23 +16,23 @@ public class MessageProducerService {
     private String topicName;
 
     @Autowired
-    KafkaTemplate<String, String> kafkaTemplate;
+    KafkaTemplate<String, Greeting> kafkaTemplate;
 
-    public void sendMessage(String message) {
+    public void sendMessage(Greeting message) {
         this.kafkaTemplate.send(this.topicName, message);
     }
 
-    public void sendMessageWithCallback(String message) {
-        ListenableFuture<SendResult<String, String>> future = this.kafkaTemplate.send(this.topicName, message);
+    public void sendMessageWithCallback(Greeting message) {
+        ListenableFuture<SendResult<String, Greeting>> future = this.kafkaTemplate.send(this.topicName, message);
 
-        future.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
+        future.addCallback(new ListenableFutureCallback<SendResult<String, Greeting>>() {
             @Override
             public void onFailure(Throwable throwable) {
                 System.out.println("Unable to send message=[" + message + "] due to : " + throwable.getMessage());
             }
 
             @Override
-            public void onSuccess(SendResult<String, String> result) {
+            public void onSuccess(SendResult<String, Greeting> result) {
                 System.out.println("Sent message=[" + message + "] with offset=[" + result.getRecordMetadata().offset() + "]");
             }
         });

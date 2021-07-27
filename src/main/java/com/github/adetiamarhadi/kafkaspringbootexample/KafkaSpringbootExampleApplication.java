@@ -1,5 +1,6 @@
 package com.github.adetiamarhadi.kafkaspringbootexample;
 
+import com.github.adetiamarhadi.kafkaspringbootexample.dto.Greeting;
 import com.github.adetiamarhadi.kafkaspringbootexample.services.MessageProducerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -21,8 +22,8 @@ public class KafkaSpringbootExampleApplication {
 
 	@PostConstruct
 	public void run() {
-		this.messageProducerService.sendMessage("hello world!");
-		this.messageProducerService.sendMessageWithCallback("hi again!");
+		this.messageProducerService.sendMessage(Greeting.builder().message("hi").name("adet").build());
+		this.messageProducerService.sendMessageWithCallback(Greeting.builder().message("selamat pagi").name("kamu").build());
 	}
 
 }
